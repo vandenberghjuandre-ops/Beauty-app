@@ -14,12 +14,12 @@
 -->
 <script>
   const CONFIG = {
-    salonName: "Studio Brow & Lash",
+    salonName: "Beau Moi Lash and Brows",
     tagline: "Precision brows, effortless lashes.",
     city: "Bloemfontein",
     address: "22 President Reitz Ave, Westdene, Bloemfontein",
     phoneDisplay: "051 000 0111",
-    whatsappNumber: "27825550199", // international format, no + or leading 0
+    whatsappNumber: "27720115103", // international format, no + or leading 0
     instagramHandle: "@studio.browlash",
     mapEmbedUrl: "https://www.google.com/maps?q=Westdene+Bloemfontein&output=embed",
     accentGold: "#B87A6B",
@@ -545,8 +545,8 @@
         <input type="date" id="book-date">
       </div>
       <div class="field">
-        <label>Preferred time</label>
-        <div class="pill-select" id="modal-time-pills"></div>
+        <label for="book-time">Preferred time</label>
+        <input type="time" id="book-time">
       </div>
       <div class="modal-actions">
         <button class="back" onclick="goStep(2)">Back</button>
@@ -643,7 +643,7 @@ function waLink(message){
 /* =====================================================================
    Booking modal logic
 ===================================================================== */
-let bookingState = { services: [], stylist: null, time: null };
+let bookingState = { services: [], stylist: null };
 
 function openBooking(){
   document.getElementById('booking-overlay').classList.add('open');
@@ -686,17 +686,6 @@ function renderModalPills(){
     p.onclick = () => { bookingState.stylist = st.name; renderModalPills(); };
     stWrap.appendChild(p);
   });
-
-  const timeWrap = document.getElementById('modal-time-pills');
-  timeWrap.innerHTML = '';
-  ['09:00','11:00','13:00','15:00','17:00'].forEach(t => {
-    const p = document.createElement('button');
-    p.className = 'pill'; p.type = 'button';
-    p.setAttribute('aria-pressed', bookingState.time === t);
-    p.textContent = t;
-    p.onclick = () => { bookingState.time = t; renderModalPills(); };
-    timeWrap.appendChild(p);
-  });
 }
 
 function goStep(n){
@@ -708,19 +697,21 @@ function goStep(n){
 function updateSummary(){
   const svcNames = bookingState.services.map(id => CONFIG.services.find(s=>s.id===id)?.name).filter(Boolean);
   const date = document.getElementById('book-date').value || '(no date chosen)';
+  const time = document.getElementById('book-time').value || '(no time chosen)';
   document.getElementById('modal-summary').innerHTML = `
     <strong>Services:</strong> ${svcNames.join(', ') || '(none selected)'}<br>
     <strong>Artist:</strong> ${bookingState.stylist || '(none selected)'}<br>
     <strong>Date:</strong> ${date}<br>
-    <strong>Time:</strong> ${bookingState.time || '(none selected)'}
+    <strong>Time:</strong> ${time}
   `;
 }
 
 function sendBooking(){
   const name = document.getElementById('book-name').value || 'A client';
   const date = document.getElementById('book-date').value || 'a date to be confirmed';
+  const time = document.getElementById('book-time').value || 'TBC';
   const svcNames = bookingState.services.map(id => CONFIG.services.find(s=>s.id===id)?.name).filter(Boolean).join(', ') || 'a service to be confirmed';
-  const msg = `Hi ${CONFIG.salonName}, I'd like to book:\n\nName: ${name}\nService(s): ${svcNames}\nArtist: ${bookingState.stylist || 'No preference'}\nDate: ${date}\nTime: ${bookingState.time || 'TBC'}\n\nPlease confirm availability.`;
+  const msg = `Hi ${CONFIG.salonName}, I'd like to book:\n\nName: ${name}\nService(s): ${svcNames}\nArtist: ${bookingState.stylist || 'No preference'}\nDate: ${date}\nTime: ${time}\n\nPlease confirm availability.`;
   window.open(waLink(msg), '_blank');
 }
 
@@ -777,10 +768,11 @@ chatForm.addEventListener('submit', e => {
 });
 
 document.getElementById('book-date').addEventListener('change', updateSummary);
+document.getElementById('book-time').addEventListener('change', updateSummary);
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 </body>
-</html>
+                                                               </html>
